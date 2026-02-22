@@ -1,0 +1,21 @@
+package com.example.practice_1.screens
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun ContentScreen(){
+    Column(
+        Modifier.Companion.fillMaxSize(),
+        horizontalAlignment = Alignment.Companion.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Вы на странице контент", fontSize = 24.sp)
+    }
+}
