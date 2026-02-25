@@ -88,8 +88,11 @@ fun FormScreen(){
                 var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
                 var passwordVisible by remember { mutableStateOf(true) }
+                var name by remember { mutableStateOf("") }
                 var nameCat  by remember {  mutableStateOf("")}
                 var breedCat by remember { mutableStateOf("") }
+                var years by remember { mutableStateOf("") }
+                var description by remember { mutableStateOf("") }
                 var usersList by remember { mutableStateOf(listOf<String>()) }
 
                 TextField(
@@ -142,6 +145,23 @@ fun FormScreen(){
                 )
 
                 TextField(
+                    value = name,
+                    onValueChange = { it -> name = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next
+                    ),
+                    placeholder = {Text("Введите ваше имя")},
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = ForestDark,
+                        unfocusedTextColor = ForestDark,
+                        focusedIndicatorColor = OliveDark,
+                        focusedContainerColor = White
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
                     value = nameCat,
                     onValueChange = { it -> nameCat = it },
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -175,18 +195,57 @@ fun FormScreen(){
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                TextField(
+                    value = years,
+                    onValueChange = { it -> years = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    placeholder = {Text("Введите ваше имя")},
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = ForestDark,
+                        unfocusedTextColor = ForestDark,
+                        focusedIndicatorColor = OliveDark,
+                        focusedContainerColor = White
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = description,
+                    onValueChange = { it -> description = it },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next
+                    ),
+                    placeholder = {Text("Введите ваше имя")},
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = ForestDark,
+                        unfocusedTextColor = ForestDark,
+                        focusedIndicatorColor = OliveDark,
+                        focusedContainerColor = White
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Button(
                     onClick = {
                         if (email.isNotBlank() && password.isNotBlank() &&
                             nameCat.isNotBlank() && breedCat.isNotBlank()) {
 
-                            val newUser = "$email;$password;$nameCat;$breedCat"
+                            val newUser = "$email;$name;$nameCat;$breedCat;$years;$description"
                             usersList = usersList + newUser
+
 
                             email = ""
                             password = ""
+                            name = ""
                             nameCat = ""
                             breedCat = ""
+                            years = ""
+                            description = ""
                             passwordVisible = true
                         }
                     },
