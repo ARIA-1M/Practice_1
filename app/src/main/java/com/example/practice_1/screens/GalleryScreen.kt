@@ -97,7 +97,7 @@ fun CatCard(cat: Cat) {
         ){
             Image(
                 painter = painterResource(id = cat.image),
-                contentDescription = cat.name,
+                contentDescription = "",
                 modifier = Modifier.size(200.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
