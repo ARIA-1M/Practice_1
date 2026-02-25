@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practice_1.navigation.AppNavigation
+import com.example.practice_1.screens.FormScreen
 
 import com.example.practice_1.ui.theme.Practice_1Theme
 
@@ -27,8 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Practice_1Theme {
-                var navController = rememberNavController()
-                AppNavigation (navController)
+                FormScreen()
             }
 
         }
