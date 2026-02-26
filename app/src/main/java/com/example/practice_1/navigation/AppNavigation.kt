@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.practice_1.screens.FormScreen
 import com.example.practice_1.screens.GalleryScreen
-import com.example.practice_1.screens.HomeScreen
+
 import com.example.practice_1.screens.PersonalCardScreen
 
 @Composable
