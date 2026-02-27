@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
-import com.example.practice_1.navigation.Screen
 import com.example.practice_1.ui.theme.CreamLight
 import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.SandMedium
@@ -38,7 +37,7 @@ class CatFact(
     val icon: Int
 )
 @Composable
-fun DetailScreen(){
+fun DetailScreen(onBack: () -> Boolean) {
 
     val facts = remember {
         listOf(

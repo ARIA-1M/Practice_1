@@ -40,7 +40,7 @@ class Cat(
     val image: Int
 )
 @Composable
-fun GalleryScreen(){
+fun GalleryScreen(onBack: () -> Boolean) {
     val cats = remember {
         listOf(
             Cat("Герц", "Сиамский", "Ласковый и разговорчивый", R.drawable.cat1),

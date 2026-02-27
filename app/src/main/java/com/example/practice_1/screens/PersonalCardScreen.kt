@@ -1,31 +1,19 @@
 package com.example.practice_1.screens
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,17 +27,16 @@ import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
 
-class Profile(
-    val ownerName: String = "Перевезенцева Мария",
-    val email: String = "perevezencevamaria@gmail.com",
-    val petName: String = "Ричард",
-    val breed: String = "Шотланский вислоухий",
-    val avatarRes: Int = R.drawable.ava_cat,
-    val years: Int = 1,
-    val description: String = "Самый милый кот на свете"
-)
 @Composable
-fun PersonalCardScreen(profile: Profile = Profile(), onSave: (Profile) -> Unit = {} ) {
+fun PersonalCardScreen(
+    ownerName: String,
+    email: String,
+    petName: String,
+    breed: String,
+    years: String,
+    description: String,
+    onBack: () -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
@@ -80,7 +67,7 @@ fun PersonalCardScreen(profile: Profile = Profile(), onSave: (Profile) -> Unit =
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = profile.avatarRes),
+                        painter = painterResource(id =  R.drawable.ava_cat),
                         contentDescription = "",
                         modifier = Modifier.size(200.dp)
                             .clip(RoundedCornerShape(35.dp))
@@ -88,13 +75,13 @@ fun PersonalCardScreen(profile: Profile = Profile(), onSave: (Profile) -> Unit =
                     Spacer(modifier = Modifier.padding(bottom = 20.dp, top = 20.dp))
                     Column {
                         Text(
-                            text = profile.ownerName,
+                            text = ownerName,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = ForestDark
                         )
                         Text(
-                            text = profile.email,
+                            text = email,
                             fontSize = 18.sp,
                             color = OliveDark
                         )
@@ -106,22 +93,22 @@ fun PersonalCardScreen(profile: Profile = Profile(), onSave: (Profile) -> Unit =
                         verticalArrangement = Arrangement.spacedBy(8.dp))
                     {
                         Text(
-                            text = "Имя питомца: " + profile.petName,
+                            text = "Имя питомца: " + petName,
                             fontSize = 20.sp,
                             color = ForestDark
                         )
                         Text(
-                            text = "Порода: " + profile.breed,
+                            text = "Порода: " + breed,
                             fontSize = 18.sp,
                             color = ForestDark
                         )
                         Text(
-                            text = "Количество лет: " + profile.years,
+                            text = "Количество лет: " + years,
                             fontSize = 18.sp,
                             color = ForestDark
                         )
                         Text(
-                            text = "Описание: " + profile.description,
+                            text = "Описание: " + description,
                             fontSize = 18.sp,
                             color = ForestDark
                         )

@@ -1,19 +1,16 @@
 package com.example.practice_1.screens
 
-import android.service.autofill.UserData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,8 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +44,8 @@ import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
 
 @Composable
-fun FormScreen(){
+fun FormScreen( onSave: (String, String, String, String, String, String) -> Unit,
+                onBack: () -> Unit){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
@@ -202,7 +198,7 @@ fun FormScreen(){
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
                     ),
-                    placeholder = {Text("Введите ваше имя")},
+                    placeholder = {Text("Введите количество лет")},
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = ForestDark,
                         unfocusedTextColor = ForestDark,
@@ -219,7 +215,7 @@ fun FormScreen(){
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next
                     ),
-                    placeholder = {Text("Введите ваше имя")},
+                    placeholder = {Text("Введите описание")},
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = ForestDark,
                         unfocusedTextColor = ForestDark,
@@ -238,7 +234,7 @@ fun FormScreen(){
                             val newUser = "$email;$name;$nameCat;$breedCat;$years;$description"
                             usersList = usersList + newUser
 
-
+                            onSave( name, email, nameCat, breedCat, years, description)
                             email = ""
                             password = ""
                             name = ""

@@ -4,26 +4,32 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.practice_1.screens.DetailScreen
 import com.example.practice_1.screens.FormScreen
 import com.example.practice_1.screens.GalleryScreen
+import com.example.practice_1.screens.HomeScreen
 
 import com.example.practice_1.screens.PersonalCardScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController){
-    NavHost(navController=navController, startDestination = Screen.Home.route){
-        /*сomposable(Screen.Home.route) {
-            HomeScreen(
-                onNavigateToForm = { navController.navigate(Screen.Form.route) },
-                onNavigateToGallery = { navController.navigate(Screen.Gallery.route) },
-                onNavigateToPersonalCard = { navController.navigate(Screen.PersonalCard.route) },
-                onNavigateToList = { navController.navigate(Screen.List.route) },
-                onNavigateToDetail = { navController.navigate(Screen.Detail.route) }
-            )
+    NavHost(navController=navController, startDestination = Screen.Form.route){
+
+        composable(Screen.Home.route) {
+            HomeScreen()
         }
 
         composable(Screen.Form.route) {
             FormScreen(
+                onSave = { ownerName, email, petName, breed, years, description ->
+                    navController.navigate(
+                        "${Screen.PersonalCard.route}/$ownerName/$email/$petName/$breed/$years/$description"
+                    ) {
+                        popUpTo(Screen.Form.route) {
+                            inclusive = true
+                        }
+                    }
+                },
                 onBack = { navController.navigateUp() }
             )
         }
@@ -34,15 +40,16 @@ fun AppNavigation(navController: NavHostController){
             )
         }
 
-        composable(Screen.PersonalCard.route) {
-            PersonalCardScreen(
-                onBack = { navController.navigateUp() }
-            )
-        }
+        composable("${Screen.PersonalCard.route}/{ownerName}/{email}/{petName}/{breed}/{years}/{description}")
+        { backStackEntry ->
 
-        composable(Screen.List.route) {
-            ListScreen(
-                onItemClick = { /* пока ничего */ },
+            PersonalCardScreen(
+                ownerName = backStackEntry.arguments?.getString("ownerName") ?: "",
+                email = backStackEntry.arguments?.getString("email") ?: "",
+                petName = backStackEntry.arguments?.getString("petName") ?: "",
+                breed = backStackEntry.arguments?.getString("breed") ?: "",
+                years = backStackEntry.arguments?.getString("years") ?: "",
+                description = backStackEntry.arguments?.getString("description") ?: "",
                 onBack = { navController.navigateUp() }
             )
         }
@@ -51,7 +58,7 @@ fun AppNavigation(navController: NavHostController){
             DetailScreen(
                 onBack = { navController.navigateUp() }
             )
-        }*/
+        }
     }
 
 }
