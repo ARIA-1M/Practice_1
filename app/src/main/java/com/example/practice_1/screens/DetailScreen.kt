@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
 import com.example.practice_1.ui.theme.CreamLight
 import com.example.practice_1.ui.theme.ForestDark
+import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
 
 class CatFact(
@@ -37,7 +40,7 @@ class CatFact(
     val icon: Int
 )
 @Composable
-fun DetailScreen(onBack: () -> Boolean) {
+fun DetailScreen(onBack: () -> Unit) {
 
     val facts = remember {
         listOf(
@@ -80,6 +83,15 @@ fun DetailScreen(onBack: () -> Boolean) {
                     FactGrid(fact = fact)
                 }
             }
+        }
+        Button(
+            onClick = onBack,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = OliveDark,
+                contentColor = CreamLight,)
+        ) {
+            Text("Вернутся назад")
         }
     }
 }

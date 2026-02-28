@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
@@ -40,7 +42,7 @@ class Cat(
     val image: Int
 )
 @Composable
-fun GalleryScreen(onBack: () -> Boolean) {
+fun GalleryScreen(onBack: () -> Unit) {
     val cats = remember {
         listOf(
             Cat("Герц", "Сиамский", "Ласковый и разговорчивый", R.drawable.cat1),
@@ -79,7 +81,17 @@ fun GalleryScreen(onBack: () -> Boolean) {
                     CatCard(cat = cat)
                 }
             }
-        }}
+            Button(
+                onClick = onBack,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OliveDark,
+                    contentColor = CreamLight,)
+            ) {
+                Text("Вернутся назад")
+            }
+        }
+    }
 }
 
 @Composable
@@ -124,6 +136,7 @@ fun CatCard(cat: Cat) {
                     color = OliveDark
                 )
             }
+
         }
     }
 }
