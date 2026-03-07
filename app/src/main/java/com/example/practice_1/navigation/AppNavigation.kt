@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.practice_1.screens.CatProfileData
 import com.example.practice_1.screens.DetailScreen
 import com.example.practice_1.screens.FormScreen
 import com.example.practice_1.screens.GalleryScreen
@@ -21,16 +22,11 @@ fun AppNavigation(navController: NavHostController){
 
         composable(Screen.Form.route) {
             FormScreen(
-                onSave = { ownerName, email, petName, breed, years, description ->
-                    navController.navigate(
-                        "${Screen.PersonalCard.route}/$ownerName/$email/$petName/$breed/$years/$description"
-                    ) {
-                        popUpTo(Screen.Form.route) {
-                            inclusive = true
-                        }
+                onSave = {
+                    navController.navigate(Screen.PersonalCard.route) {
+                        popUpTo(Screen.Form.route) { inclusive = true }
                     }
-                },
-                onBack = { navController.navigateUp() }
+                }
             )
         }
 
@@ -40,24 +36,20 @@ fun AppNavigation(navController: NavHostController){
             )
         }
 
-        composable("${Screen.PersonalCard.route}/{ownerName}/{email}/{petName}/{breed}/{years}/{description}")
-        { backStackEntry ->
-
+        composable(Screen.PersonalCard.route) {
             PersonalCardScreen(
-                ownerName = backStackEntry.arguments?.getString("ownerName") ?: "",
-                email = backStackEntry.arguments?.getString("email") ?: "",
-                petName = backStackEntry.arguments?.getString("petName") ?: "",
-                breed = backStackEntry.arguments?.getString("breed") ?: "",
-                years = backStackEntry.arguments?.getString("years") ?: "",
-                description = backStackEntry.arguments?.getString("description") ?: "",
+                ownerName = CatProfileData.ownerName,
+                email = CatProfileData.email,
+                petName = CatProfileData.petName,
+                breed = CatProfileData.breed,
+                years = CatProfileData.years,
+                description = CatProfileData.description,
                 onBack = { navController.navigateUp() }
             )
         }
 
         composable(Screen.Detail.route) {
-            DetailScreen(
-                onBack = { navController.navigateUp() }
-            )
+            DetailScreen()
         }
     }
 

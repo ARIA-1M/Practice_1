@@ -40,7 +40,7 @@ class CatFact(
     val icon: Int
 )
 @Composable
-fun DetailScreen(onBack: () -> Unit) {
+fun DetailScreen() {
 
     val facts = remember {
         listOf(
@@ -83,15 +83,6 @@ fun DetailScreen(onBack: () -> Unit) {
                     FactGrid(fact = fact)
                 }
             }
-        }
-        Button(
-            onClick = onBack,
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = OliveDark,
-                contentColor = CreamLight,)
-        ) {
-            Text("Вернутся назад")
         }
     }
 }

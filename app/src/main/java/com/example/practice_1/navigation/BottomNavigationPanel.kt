@@ -117,7 +117,7 @@ fun ItemNav(item: NavItem,
         if (selected) {
             Box(
                 modifier = Modifier.width(38.dp)
-                    .height(4.dp)
+                    .height(8.dp)
                     .background(
                         color = OliveDark,
                         shape = RoundedCornerShape(50)

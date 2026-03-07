@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.practice_1.navigation.AppNavigation
+import com.example.practice_1.navigation.MainAppScaffold
 import com.example.practice_1.screens.DetailScreen
 
 import com.example.practice_1.ui.theme.Practice_1Theme
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Practice_1Theme {
                 val navController = rememberNavController()
-                AppNavigation(navController = navController)
+                MainAppScaffold(navController)
             }
 
         }

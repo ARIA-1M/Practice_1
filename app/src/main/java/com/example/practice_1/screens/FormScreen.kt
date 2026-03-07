@@ -43,9 +43,16 @@ import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
 
+object CatProfileData {
+    var ownerName by mutableStateOf("")
+    var email by mutableStateOf("")
+    var petName by mutableStateOf("")
+    var breed by mutableStateOf("")
+    var years by mutableStateOf("")
+    var description by mutableStateOf("")
+}
 @Composable
-fun FormScreen( onSave: (String, String, String, String, String, String) -> Unit,
-                onBack: () -> Unit){
+fun FormScreen( onSave: () -> Unit){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
@@ -89,7 +96,6 @@ fun FormScreen( onSave: (String, String, String, String, String, String) -> Unit
                 var breedCat by remember { mutableStateOf("") }
                 var years by remember { mutableStateOf("") }
                 var description by remember { mutableStateOf("") }
-                var usersList by remember { mutableStateOf(listOf<String>()) }
 
                 TextField(
                     value = email,
@@ -231,10 +237,15 @@ fun FormScreen( onSave: (String, String, String, String, String, String) -> Unit
                         if (email.isNotBlank() && password.isNotBlank() &&
                             nameCat.isNotBlank() && breedCat.isNotBlank()) {
 
-                            val newUser = "$email;$name;$nameCat;$breedCat;$years;$description"
-                            usersList = usersList + newUser
+                            CatProfileData.ownerName = name
+                            CatProfileData.email = email
+                            CatProfileData.petName = nameCat
+                            CatProfileData.breed = breedCat
+                            CatProfileData.years = years
+                            CatProfileData.description = description
 
-                            onSave( name, email, nameCat, breedCat, years, description)
+                            onSave()
+
                             email = ""
                             password = ""
                             name = ""
