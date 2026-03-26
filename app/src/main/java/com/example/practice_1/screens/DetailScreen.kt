@@ -19,6 +19,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,10 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
+import com.example.practice_1.data.entity.Fact
 import com.example.practice_1.ui.theme.CreamLight
 import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
+import com.example.practice_1.viewmodel.FactViewModel
+
 
 class CatFact(
     val id: Int,
@@ -40,22 +45,10 @@ class CatFact(
     val icon: Int
 )
 @Composable
-fun DetailScreen() {
+fun DetailScreen( viewModel: FactViewModel) {
 
-    val facts = remember {
-        listOf(
-            CatFact(1, "Кошки не мяукают друг с другом — это только для людей", R.drawable.cat_meow),
-            CatFact(2, "Рисунок на носу кошки уникален, как отпечаток пальца", R.drawable.cat_nose),
-            CatFact(3, "На лбу у кошек есть рисунок в виде буквы М", R.drawable.cat_m),
-            CatFact(4, "Усы кошки показывают её настроение", R.drawable.cat_whiskers),
-            CatFact(5, "Кошка может иметь более 100 котят за жизнь", R.drawable.cat_kitten),
-            CatFact(6, "Кошки всегда приземляются на лапы", R.drawable.cat_fall),
-            CatFact(7, "Кошки спят около 16 часов в день", R.drawable.cat_sleep),
-            CatFact(8, "У кошек потеют только подушечки лап", R.drawable.cat_paws),
-            CatFact(9, "Кошки издают около 100 звуков (собаки только 10)", R.drawable.cat_sound),
-            CatFact(10, "Кошка прыгает в 5 раз выше своего роста", R.drawable.cat_jump)
-        )
-    }
+    val facts by viewModel.allFact.collectAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
@@ -88,7 +81,7 @@ fun DetailScreen() {
 }
 
 @Composable
-fun FactGrid(fact: CatFact) {
+fun FactGrid(fact: Fact) {
     Card(
         modifier = Modifier.fillMaxWidth()
             .height(300.dp),
@@ -104,7 +97,7 @@ fun FactGrid(fact: CatFact) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = fact.icon),
+                painter = painterResource(id = fact.imageRes),
                 contentDescription = "",
                 modifier = Modifier.size(200.dp)
                     .clip(RoundedCornerShape(12.dp)),
@@ -114,7 +107,7 @@ fun FactGrid(fact: CatFact) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = fact.fact,
+                text = fact.description,
                 fontSize = 16.sp,
                 color = ForestDark,
                 lineHeight = 16.sp

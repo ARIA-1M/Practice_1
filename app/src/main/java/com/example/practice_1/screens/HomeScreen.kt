@@ -1,6 +1,7 @@
 package com.example.practice_1.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,12 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
 import com.example.practice_1.ui.theme.CreamLight
 import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.OliveDark
+import com.example.practice_1.ui.theme.SandMedium
+import com.example.practice_1.ui.theme.White
 
 @Composable
 fun HomeScreen(){
@@ -109,6 +114,7 @@ fun ImageCard(text: String, image: Int) {
         modifier = Modifier.fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp)
+
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -127,11 +133,17 @@ fun ImageCard(text: String, image: Int) {
 
 @Composable
 fun InfoText(text: String) {
-    Text(
-        text = text,
-        fontSize = 20.sp,
-        color = OliveDark,
-        lineHeight = 20.sp,
-        modifier = Modifier.padding(vertical = 4.dp)
-    )
+    Box(modifier = Modifier.background(SandMedium,
+        shape = RoundedCornerShape(12.dp)),
+        ){
+        Text(
+            text = text,
+            fontSize = 20.sp,
+            color = ForestDark,
+            textAlign = TextAlign.Center,
+            lineHeight = 30.sp,
+            modifier = Modifier.padding(vertical = 5.dp)
+        )
+    }
+
 }

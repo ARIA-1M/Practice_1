@@ -11,9 +11,12 @@ import com.example.practice_1.screens.GalleryScreen
 import com.example.practice_1.screens.HomeScreen
 
 import com.example.practice_1.screens.PersonalCardScreen
+import com.example.practice_1.viewmodel.FactViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController){
+fun AppNavigation(navController: NavHostController,
+        factViewModel: FactViewModel
+){
     NavHost(navController=navController, startDestination = Screen.Form.route){
 
         composable(Screen.Home.route) {
@@ -49,7 +52,7 @@ fun AppNavigation(navController: NavHostController){
         }
 
         composable(Screen.Detail.route) {
-            DetailScreen()
+            DetailScreen(viewModel = factViewModel)
         }
     }
 
