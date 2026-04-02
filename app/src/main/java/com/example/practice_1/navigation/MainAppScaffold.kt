@@ -15,11 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.practice_1.viewmodel.CatViewModel
 import com.example.practice_1.viewmodel.FactViewModel
+import com.example.practice_1.viewmodel.UserViewModel
 
 @Composable
 fun MainAppScaffold(navController: NavHostController,
-    factViewModel: FactViewModel) {
+    factViewModel: FactViewModel,
+    userViewModel: UserViewModel,
+    catViewModel: CatViewModel) {
     // Получаем текущий скрин
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -92,7 +96,7 @@ fun MainAppScaffold(navController: NavHostController,
                 .background(Color.White)
                 .padding(paddingValues)
         ) {
-            AppNavigation(navController, factViewModel)
+            AppNavigation(navController, factViewModel, userViewModel, catViewModel )
         }
     }
 }

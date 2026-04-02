@@ -10,13 +10,11 @@ import androidx.lifecycle.viewModelScope
 
 class FactViewModel(private val repository: FactRepository) : ViewModel(){
 
+
     val allFact: StateFlow<List<Fact>> = repository.allFact
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-
-
-
 }

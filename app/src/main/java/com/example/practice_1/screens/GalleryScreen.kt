@@ -1,27 +1,14 @@
 package com.example.practice_1.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,39 +18,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
-import com.example.practice_1.ui.theme.CreamLight
-import com.example.practice_1.ui.theme.ForestDark
-import com.example.practice_1.ui.theme.OliveDark
-import com.example.practice_1.ui.theme.SandMedium
+import com.example.practice_1.data.entity.Cat
+import com.example.practice_1.ui.theme.*
+import com.example.practice_1.viewmodel.CatViewModel
 
-class Cat(
-    val name: String,
-    val breed: String,
-    val desc: String,
-    val image: Int
-)
 @Composable
-fun GalleryScreen(onBack: () -> Unit) {
-    val cats = remember {
-        listOf(
-            Cat("Герц", "Сиамский", "Ласковый и разговорчивый", R.drawable.cat1),
-            Cat("Мурка", "Мейн-кун", "Пушистая и спокойная", R.drawable.cat2),
-            Cat("Снежок", "Британский", "Белый и пушистый", R.drawable.cat3),
-            Cat("Ричард", "Шотландский", "Игривый и активный", R.drawable.cat4),
-            Cat("Сфинкс", "Канадский", "Лысый и ласковый", R.drawable.cat5),
-            Cat("Клеопатра", "Египетская", "Грациозная и таинственная", R.drawable.cat6),
-            Cat("Лиана", "Русская голубая", "Серебристая шерсть, преданная", R.drawable.cat7),
-            Cat("Симба", "Бенгальская", "Дикий окрас, очень активный и любопытный", R.drawable.cat8),
-            Cat("Барон", "Невская маскарадная", "Пушистый, с голубыми глазами", R.drawable.cat9),
-            Cat("Плюша", "Экзотическая", "Спокойная, с приплюснутой мордочкой", R.drawable.cat10)
-        )
-    }
+fun GalleryScreen(
+    catViewModel: CatViewModel,
+    onBack: () -> Unit
+) {
+
+    val cats by catViewModel.allCat.collectAsState(initial = emptyList())
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
             Text(
@@ -71,7 +44,8 @@ fun GalleryScreen(onBack: () -> Unit) {
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = ForestDark,
-                modifier = Modifier.padding(bottom = 20.dp, top = 20.dp)
+                modifier = Modifier
+                    .padding(bottom = 20.dp, top = 20.dp)
                     .align(Alignment.CenterHorizontally)
             )
 
@@ -83,18 +57,19 @@ fun GalleryScreen(onBack: () -> Unit) {
                     CatCard(cat = cat)
                 }
             }
+
             Button(
                 onClick = onBack,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = OliveDark,
-                    contentColor = CreamLight,)
+                    contentColor = CreamLight
+                )
             ) {
-                Text("Вернутся назад")
+                Text("Вернуться назад")
             }
         }
     }
-
 }
 
 @Composable
@@ -103,43 +78,50 @@ fun CatCard(cat: Cat) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-        containerColor = SandMedium
-    )){
+            containerColor = SandMedium
+        )
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Image(
-                painter = painterResource(id = cat.image),
-                contentDescription = "",
-                modifier = Modifier.size(200.dp)
+                painter = painterResource(id = cat.imageRes),
+                contentDescription = cat.name,
+                modifier = Modifier
+                    .size(150.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
-
             )
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Column {
                 Text(
-                    text = "Имя: " + cat.name,
-                    fontSize = 20.sp,
+                    text = "Имя: ${cat.name}",
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = ForestDark
                 )
                 Text(
-                    text = "Порода: " + cat.breed,
-                    fontSize = 16.sp,
+                    text = "Порода: ${cat.breed}",
+                    fontSize = 14.sp,
                     color = ForestDark
                 )
                 Text(
-                    text = "Описание: " + cat.desc,
-                    fontSize = 16.sp,
-                    color = OliveDark
+                    text = "Описание: ${cat.description}",
+                    fontSize = 12.sp,
+                    color = OliveDark,
+                    maxLines = 3
+                )
+                Text(
+                    text = "Возраст: ${cat.years} лет",
+                    fontSize = 12.sp,
+                    color = ForestDark.copy(alpha = 0.7f)
                 )
             }
-
         }
     }
 }

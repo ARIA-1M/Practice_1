@@ -39,12 +39,6 @@ import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
 import com.example.practice_1.viewmodel.FactViewModel
 
-
-class CatFact(
-    val id: Int,
-    val fact: String,
-    val icon: Int
-)
 @Composable
 fun DetailScreen( viewModel: FactViewModel) {
 

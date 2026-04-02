@@ -42,17 +42,10 @@ import com.example.practice_1.ui.theme.CreamLight
 import com.example.practice_1.ui.theme.ForestDark
 import com.example.practice_1.ui.theme.OliveDark
 import com.example.practice_1.ui.theme.SandMedium
+import com.example.practice_1.viewmodel.UserViewModel
 
-object CatProfileData {
-    var ownerName by mutableStateOf("")
-    var email by mutableStateOf("")
-    var petName by mutableStateOf("")
-    var breed by mutableStateOf("")
-    var years by mutableStateOf("")
-    var description by mutableStateOf("")
-}
 @Composable
-fun FormScreen( onSave: () -> Unit){
+fun FormScreen(onSave: () -> Unit, userViewModel: UserViewModel,){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
@@ -80,7 +73,7 @@ fun FormScreen( onSave: () -> Unit){
             )
             {
                 Text(
-                    text = "Анкета котика",
+                    text = "Анкета пользователя",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = ForestDark,
@@ -91,11 +84,7 @@ fun FormScreen( onSave: () -> Unit){
                 var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
                 var passwordVisible by remember { mutableStateOf(true) }
-                var name by remember { mutableStateOf("") }
-                var nameCat  by remember {  mutableStateOf("")}
-                var breedCat by remember { mutableStateOf("") }
-                var years by remember { mutableStateOf("") }
-                var description by remember { mutableStateOf("") }
+
 
                 TextField(
                     value = email,
@@ -146,129 +135,26 @@ fun FormScreen( onSave: () -> Unit){
                     }
                 )
 
-                TextField(
-                    value = name,
-                    onValueChange = { it -> name = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("Введите ваше имя")},
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = ForestDark,
-                        unfocusedTextColor = ForestDark,
-                        focusedIndicatorColor = OliveDark,
-                        focusedContainerColor = White
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
 
-                TextField(
-                    value = nameCat,
-                    onValueChange = { it -> nameCat = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("Введите имя котика")},
-                        colors = TextFieldDefaults.colors(
-                        focusedTextColor = ForestDark,
-                        unfocusedTextColor = ForestDark,
-                        focusedIndicatorColor = OliveDark,
-                        focusedContainerColor = White
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                TextField(
-                    value = breedCat,
-                    onValueChange = { it -> breedCat = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("Введите породу котика")},
-                    colors = TextFieldDefaults.colors(
-                    focusedTextColor = ForestDark,
-                        unfocusedTextColor = ForestDark,
-                        focusedIndicatorColor = OliveDark,
-                        focusedContainerColor = White
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                TextField(
-                    value = years,
-                    onValueChange = { it -> years = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("Введите количество лет")},
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = ForestDark,
-                        unfocusedTextColor = ForestDark,
-                        focusedIndicatorColor = OliveDark,
-                        focusedContainerColor = White
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                TextField(
-                    value = description,
-                    onValueChange = { it -> description = it },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    placeholder = {Text("Введите описание")},
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = ForestDark,
-                        unfocusedTextColor = ForestDark,
-                        focusedIndicatorColor = OliveDark,
-                        focusedContainerColor = White
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                )
 
                 Button(
                     onClick = {
-                        if (email.isNotBlank() && password.isNotBlank() &&
-                            nameCat.isNotBlank() && breedCat.isNotBlank()) {
-
-                            CatProfileData.ownerName = name
-                            CatProfileData.email = email
-                            CatProfileData.petName = nameCat
-                            CatProfileData.breed = breedCat
-                            CatProfileData.years = years
-                            CatProfileData.description = description
-
-                            onSave()
-
-                            email = ""
-                            password = ""
-                            name = ""
-                            nameCat = ""
-                            breedCat = ""
-                            years = ""
-                            description = ""
-                            passwordVisible = true
+                        if (email.isNotBlank() && password.isNotBlank()) {
+                            userViewModel.loginOrRegister(email, password) {
+                                onSave()
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = OliveDark,
-                        contentColor = CreamLight,
-
+                        contentColor = CreamLight
                     )
                 ) {
-                    Text("Отправить")
+                    Text("Войти")
                 }
-
             }
-
         }
-
-    } }
+    }
+    }
 }

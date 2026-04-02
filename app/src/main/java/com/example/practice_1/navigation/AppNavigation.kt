@@ -4,18 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.practice_1.screens.CatProfileData
 import com.example.practice_1.screens.DetailScreen
 import com.example.practice_1.screens.FormScreen
 import com.example.practice_1.screens.GalleryScreen
 import com.example.practice_1.screens.HomeScreen
 
 import com.example.practice_1.screens.PersonalCardScreen
+import com.example.practice_1.viewmodel.CatViewModel
 import com.example.practice_1.viewmodel.FactViewModel
+import com.example.practice_1.viewmodel.UserViewModel
 
 @Composable
 fun AppNavigation(navController: NavHostController,
-        factViewModel: FactViewModel
+        factViewModel: FactViewModel,
+        userViewModel: UserViewModel,
+        catViewModel: CatViewModel
 ){
     NavHost(navController=navController, startDestination = Screen.Form.route){
 
@@ -25,6 +28,7 @@ fun AppNavigation(navController: NavHostController,
 
         composable(Screen.Form.route) {
             FormScreen(
+                userViewModel = userViewModel,
                 onSave = {
                     navController.navigate(Screen.PersonalCard.route) {
                         popUpTo(Screen.Form.route) { inclusive = true }
@@ -35,19 +39,17 @@ fun AppNavigation(navController: NavHostController,
 
         composable(Screen.Gallery.route) {
             GalleryScreen(
+                catViewModel = catViewModel,
                 onBack = { navController.navigateUp() }
             )
         }
 
         composable(Screen.PersonalCard.route) {
             PersonalCardScreen(
-                ownerName = CatProfileData.ownerName,
-                email = CatProfileData.email,
-                petName = CatProfileData.petName,
-                breed = CatProfileData.breed,
-                years = CatProfileData.years,
-                description = CatProfileData.description,
-                onBack = { navController.navigateUp() }
+                userViewModel = userViewModel,
+                catViewModel = catViewModel,
+                onBack = { navController.navigateUp()
+                }
             )
         }
 
