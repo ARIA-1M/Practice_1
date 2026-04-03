@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.practice_1.screens.CatAddScreen
 import com.example.practice_1.screens.DetailScreen
 import com.example.practice_1.screens.FormScreen
 import com.example.practice_1.screens.GalleryScreen
@@ -49,12 +50,35 @@ fun AppNavigation(navController: NavHostController,
                 userViewModel = userViewModel,
                 catViewModel = catViewModel,
                 onBack = { navController.navigateUp()},
-                onDeleteCat = { cat -> catViewModel.delete(cat)}
+                onDelete = { cat -> catViewModel.delete(cat)},
+                onAdd = { navController.navigate(Screen.CatAdd.route) },
+                onEdit = { cat -> navController.navigate(Screen.CatEdit.route.replace("{petId}", cat.id.toString())) }
             )
         }
 
         composable(Screen.Detail.route) {
             DetailScreen(viewModel = factViewModel)
+        }
+
+        composable(Screen.CatAdd.route) {
+            CatAddScreen(
+                catViewModel = catViewModel,
+                userViewModel = userViewModel,
+                catId = null,
+                onSave = { navController.navigateUp() },
+                onCancel = { navController.navigateUp() }
+            )
+        }
+
+        composable(Screen.CatEdit.route) { backStackEntry ->
+            val petId = backStackEntry.arguments?.getString("petId")?.toIntOrNull()
+            CatAddScreen(
+                catViewModel = catViewModel,
+                userViewModel = userViewModel,
+                catId = petId,
+                onSave = { navController.navigateUp() },
+                onCancel = { navController.navigateUp() }
+            )
         }
     }
 

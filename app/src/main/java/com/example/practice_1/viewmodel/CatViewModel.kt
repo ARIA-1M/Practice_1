@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.practice_1.data.entity.Cat
 import com.example.practice_1.data.entity.User
 import com.example.practice_1.repository.CatRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.String
@@ -36,7 +38,16 @@ class CatViewModel(private val repository: CatRepository): ViewModel() {
         selectedCat = null
     }
 
-
+    fun getCatById(id: Int?): StateFlow<Cat?> {
+        val state = MutableStateFlow<Cat?>(null)
+        if (id != null) {
+            viewModelScope.launch {
+                val cat = repository.getItemById(id)
+                state.value = cat
+            }
+        }
+        return state.asStateFlow()
+    }
     fun insertCat( name: String, breed: String, years: Int, imageRes: Int, description: String, userId: Int) {
         viewModelScope.launch {
             val cat = Cat(

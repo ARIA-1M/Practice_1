@@ -31,6 +31,8 @@ fun MainAppScaffold(navController: NavHostController,
     // Задаем где показываем не показываем нижнюю панель
     val shouldShowBottomNav = when {
         currentRoute == Screen.Form.route -> false
+        currentRoute == Screen.CatAdd.route -> false
+        currentRoute == Screen.CatEdit.route -> false
         else -> true
     }
 
@@ -45,6 +47,8 @@ fun MainAppScaffold(navController: NavHostController,
             currentRoute == Screen.Gallery.route -> NavItem.Gallery
             currentRoute == Screen.Detail.route -> NavItem.Detail
             currentRoute == Screen.PersonalCard.route -> NavItem.PersonalCard
+            currentRoute == Screen.CatAdd.route -> NavItem.CatAdd
+            currentRoute == Screen.CatEdit.route -> NavItem.CatEdit
             else -> selectedItem
         }
     }
@@ -83,6 +87,16 @@ fun MainAppScaffold(navController: NavHostController,
                             NavItem.PersonalCard -> {
                                 navController.navigate(Screen.PersonalCard.route) {
                                     popUpTo(Screen.PersonalCard.route) { inclusive = true }
+                                }
+                            }
+                            NavItem.CatAdd -> {
+                                navController.navigate(Screen.CatAdd.route) {
+                                    popUpTo(Screen.CatAdd.route) { inclusive = true }
+                                }
+                            }
+                            NavItem.CatEdit -> {
+                                navController.navigate(Screen.CatEdit.route) {
+                                    popUpTo(Screen.CatEdit.route) { inclusive = true }
                                 }
                             }
                         }

@@ -6,7 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -33,8 +35,9 @@ fun PersonalCardScreen(
     userViewModel: UserViewModel,
     catViewModel: CatViewModel,
     onBack: () -> Unit,
-    //onEdit: () -> Unit,
-    onDeleteCat: (Cat) -> Unit
+    onEdit: (Cat) -> Unit,
+    onAdd: () -> Unit,
+    onDelete: (Cat) -> Unit
 ) {
     val currentUser = userViewModel.selectedUser
     val cats by catViewModel.allCat.collectAsState(initial = emptyList())
@@ -46,8 +49,9 @@ fun PersonalCardScreen(
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(20.dp)
+                .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Карточка питомца",
@@ -110,7 +114,8 @@ fun PersonalCardScreen(
                             items(userCats) { cat ->
                                 PetCard(
                                     cat = cat,
-                                    onDelete = { onDeleteCat(cat)}
+                                    onDelete = { onDelete(cat)},
+                                    onEdit = { onEdit(cat)}
                                 )
                             }
                         }
@@ -133,7 +138,7 @@ fun PersonalCardScreen(
                         }
 
                         Button(
-                            onClick = onBack,
+                            onClick = onAdd,
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = BrownWarm,
@@ -151,7 +156,8 @@ fun PersonalCardScreen(
 
 @Composable
 fun PetCard(cat: com.example.practice_1.data.entity.Cat,
-    onDelete: () -> Unit) {
+    onDelete: () -> Unit,
+    onEdit: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -192,7 +198,7 @@ fun PetCard(cat: com.example.practice_1.data.entity.Cat,
                             tint = OliveDark,
                             modifier = Modifier
                                 .size(24.dp)
-                            //.clickable { onEdit() }
+                            .clickable { onEdit() }
                         )
 
 
