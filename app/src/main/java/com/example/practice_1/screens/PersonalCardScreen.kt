@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice_1.R
+import com.example.practice_1.data.entity.Cat
 import com.example.practice_1.ui.theme.*
 import com.example.practice_1.viewmodel.CatViewModel
 import com.example.practice_1.viewmodel.UserViewModel
@@ -33,7 +34,7 @@ fun PersonalCardScreen(
     catViewModel: CatViewModel,
     onBack: () -> Unit,
     //onEdit: () -> Unit,
-    //onDelete: () -> Unit
+    onDeleteCat: (Cat) -> Unit
 ) {
     val currentUser = userViewModel.selectedUser
     val cats by catViewModel.allCat.collectAsState(initial = emptyList())
@@ -107,7 +108,10 @@ fun PersonalCardScreen(
                             modifier = Modifier.heightIn(max = 400.dp)
                         ) {
                             items(userCats) { cat ->
-                                PetCard(cat = cat)
+                                PetCard(
+                                    cat = cat,
+                                    onDelete = { onDeleteCat(cat)}
+                                )
                             }
                         }
                     }
@@ -146,7 +150,8 @@ fun PersonalCardScreen(
 }
 
 @Composable
-fun PetCard(cat: com.example.practice_1.data.entity.Cat) {
+fun PetCard(cat: com.example.practice_1.data.entity.Cat,
+    onDelete: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -197,7 +202,7 @@ fun PetCard(cat: com.example.practice_1.data.entity.Cat) {
                             tint = BrownWarm,
                             modifier = Modifier
                                 .size(24.dp)
-                            //.clickable { onDelete() }
+                                .clickable { onDelete() }
                         )
                     }
                 }

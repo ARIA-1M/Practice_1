@@ -48,8 +48,8 @@ fun AppNavigation(navController: NavHostController,
             PersonalCardScreen(
                 userViewModel = userViewModel,
                 catViewModel = catViewModel,
-                onBack = { navController.navigateUp()
-                }
+                onBack = { navController.navigateUp()},
+                onDeleteCat = { cat -> catViewModel.delete(cat)}
             )
         }
 
