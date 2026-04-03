@@ -37,17 +37,6 @@ class CatViewModel(private val repository: CatRepository): ViewModel() {
     fun clearSelectedCat() {
         selectedCat = null
     }
-
-    fun getCatById(id: Int?): StateFlow<Cat?> {
-        val state = MutableStateFlow<Cat?>(null)
-        if (id != null) {
-            viewModelScope.launch {
-                val cat = repository.getItemById(id)
-                state.value = cat
-            }
-        }
-        return state.asStateFlow()
-    }
     fun insertCat( name: String, breed: String, years: Int, imageRes: Int, description: String, userId: Int) {
         viewModelScope.launch {
             val cat = Cat(

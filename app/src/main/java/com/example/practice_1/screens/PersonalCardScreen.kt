@@ -1,4 +1,3 @@
-
 package com.example.practice_1.screens
 
 import androidx.compose.foundation.Image
@@ -13,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,12 +27,12 @@ import com.example.practice_1.ui.theme.*
 import com.example.practice_1.viewmodel.CatViewModel
 import com.example.practice_1.viewmodel.UserViewModel
 
+
 @Composable
 fun PersonalCardScreen(
     userViewModel: UserViewModel,
     catViewModel: CatViewModel,
     onBack: () -> Unit,
-    onEdit: (Cat) -> Unit,
     onAdd: () -> Unit,
     onDelete: (Cat) -> Unit
 ) {
@@ -43,15 +40,20 @@ fun PersonalCardScreen(
     val cats by catViewModel.allCat.collectAsState(initial = emptyList())
     val userCats = cats.filter { it.userId == currentUser?.id }
 
+    // Диалог редактирования
+    var showEditDialog by remember { mutableStateOf(false) }
+    val selectedCat = catViewModel.selectedCat
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = CreamLight
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(20.dp)
-                .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Карточка питомца",
@@ -59,25 +61,21 @@ fun PersonalCardScreen(
                 fontWeight = FontWeight.Bold,
                 color = ForestDark,
                 modifier = Modifier.padding(bottom = 20.dp, top = 20.dp)
-                    .align(Alignment.CenterHorizontally)
             )
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = SandMedium
-                )
+                colors = CardDefaults.cardColors(containerColor = SandMedium)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(20.dp),
+                    modifier = Modifier.fillMaxWidth().padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ava_cat),
                         contentDescription = "",
-                        modifier = Modifier.size(120.dp)
-                            .clip(RoundedCornerShape(60.dp)),
+                        modifier = Modifier.size(120.dp).clip(RoundedCornerShape(60.dp)),
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -90,14 +88,6 @@ fun PersonalCardScreen(
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
-
-                    Text(
-                        text = "Мои питомцы",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ForestDark,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
 
                     if (userCats.isEmpty()) {
                         Text(
@@ -114,8 +104,11 @@ fun PersonalCardScreen(
                             items(userCats) { cat ->
                                 PetCard(
                                     cat = cat,
-                                    onDelete = { onDelete(cat)},
-                                    onEdit = { onEdit(cat)}
+                                    onDelete = { onDelete(cat) },
+                                    onEdit = {
+                                        catViewModel.selectCat(cat)
+                                        showEditDialog = true
+                                    }
                                 )
                             }
                         }
@@ -123,15 +116,13 @@ fun PersonalCardScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Row (
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(
                             onClick = onBack,
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = OliveDark,
-                                contentColor = CreamLight,
+                                contentColor = CreamLight
                             )
                         ) {
                             Text("Вернуться назад")
@@ -142,7 +133,7 @@ fun PersonalCardScreen(
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = BrownWarm,
-                                contentColor = CreamLight,
+                                contentColor = CreamLight
                             )
                         ) {
                             Text("Добавить")
@@ -152,67 +143,125 @@ fun PersonalCardScreen(
             }
         }
     }
+
+    if (showEditDialog && selectedCat != null) {
+        val cat = selectedCat
+
+        var name by remember { mutableStateOf(cat.name) }
+        var breed by remember { mutableStateOf(cat.breed) }
+        var years by remember { mutableStateOf(cat.years.toString()) }
+        var description by remember { mutableStateOf(cat.description) }
+
+        AlertDialog(
+            onDismissRequest = {
+                showEditDialog = false
+                catViewModel.clearSelectedCat()
+            },
+            title = {
+                Text(
+                    "Редактировать питомца",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Имя питомца") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    OutlinedTextField(
+                        value = breed,
+                        onValueChange = { breed = it },
+                        label = { Text("Порода") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    OutlinedTextField(
+                        value = years,
+                        onValueChange = {
+                            if (it.all { c -> c.isDigit() } || it.isEmpty()) years = it
+                        },
+                        label = { Text("Возраст (лет)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        label = { Text("Описание") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val yearsInt = years.toIntOrNull() ?: 0
+                        if (name.isNotBlank() && breed.isNotBlank()) {
+                            catViewModel.update(
+                                id = cat.id,
+                                name = name,
+                                breed = breed,
+                                years = yearsInt,
+                                imageRes = cat.imageRes,
+                                description = description,
+                                userId = currentUser?.id ?: 1
+                            )
+                            showEditDialog = false
+                            catViewModel.clearSelectedCat()
+                        }
+                    }
+                ) {
+                    Text("Сохранить", color = OliveDark, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showEditDialog = false
+                    catViewModel.clearSelectedCat()
+                }) {
+                    Text("Отмена", color = BrownWarm)
+                }
+            }
+        )
+    }
 }
 
 @Composable
-fun PetCard(cat: com.example.practice_1.data.entity.Cat,
+fun PetCard(
+    cat: Cat,
     onDelete: () -> Unit,
-    onEdit: () -> Unit) {
+    onEdit: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = CreamLight
-        )
+        colors = CardDefaults.cardColors(containerColor = CreamLight)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(12.dp),
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = cat.imageRes),
                 contentDescription = cat.name,
-                modifier = Modifier.size(80.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                modifier = Modifier.size(80.dp).clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Row (
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = cat.name,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ForestDark
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
 
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Редактировать",
-                            tint = OliveDark,
-                            modifier = Modifier
-                                .size(24.dp)
-                            .clickable { onEdit() }
-                        )
-
-
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Удалить",
-                            tint = BrownWarm,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable { onDelete() }
-                        )
-                    }
-                }
-
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = cat.name,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = ForestDark
+                )
                 Text(
                     text = "Порода: ${cat.breed}",
                     fontSize = 14.sp,
@@ -228,6 +277,21 @@ fun PetCard(cat: com.example.practice_1.data.entity.Cat,
                     fontSize = 12.sp,
                     color = ForestDark.copy(alpha = 0.7f),
                     maxLines = 2
+                )
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Редактировать",
+                    tint = OliveDark,
+                    modifier = Modifier.size(24.dp).clickable { onEdit() }
+                )
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Удалить",
+                    tint = BrownWarm,
+                    modifier = Modifier.size(24.dp).clickable { onDelete() }
                 )
             }
         }

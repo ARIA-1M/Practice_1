@@ -1,13 +1,9 @@
 package com.example.practice_1.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,38 +20,21 @@ import com.example.practice_1.ui.theme.*
 import com.example.practice_1.viewmodel.CatViewModel
 import com.example.practice_1.viewmodel.UserViewModel
 
+
 @Composable
 fun CatAddScreen(
     catViewModel: CatViewModel,
     userViewModel: UserViewModel,
-    catId: Int? = null,     // null это добавление, число это редактирование
     onSave: () -> Unit,
     onCancel: () -> Unit
 ) {
-    // Получаем данные для редактирования
-    val existingCat by catViewModel.getCatById(catId).collectAsState(initial = null)
-    val isLoading = catId != null && existingCat == null
     val currentUser = userViewModel.selectedUser
 
-    // 👇 ЛОГ 2: загрузился ли кот
-    Log.d("CatAddScreen", "existingCat = $existingCat")
-
-    // 👇 ЛОГ 3: текущий пользователь
-    Log.d("CatAddScreen", "currentUser = ${currentUser?.email}")
-
-
-    // Состояния полей
-    var name by remember { mutableStateOf(existingCat?.name ?: "") }
-    var breed by remember { mutableStateOf(existingCat?.breed ?: "") }
-    var years by remember { mutableStateOf(existingCat?.years?.toString() ?: "") }
-    var description by remember { mutableStateOf(existingCat?.description ?: "") }
-    var selectedImage by remember { mutableStateOf(existingCat?.imageRes ?: R.drawable.ava_cat) }
-
-    // 👇 ЛОГ 4: какие значения полей после remember
-    LaunchedEffect(existingCat) {
-        Log.d("CatAddScreen", "name = $name, breed = $breed, years = $years")
-    }
-    val isEditing = catId != null
+    var name by remember { mutableStateOf("") }
+    var breed by remember { mutableStateOf("") }
+    var years by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var selectedImage by remember { mutableStateOf(R.drawable.ava_cat) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -67,9 +46,7 @@ fun CatAddScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
-
+            // Фото
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -78,13 +55,11 @@ fun CatAddScreen(
                     modifier = Modifier
                         .size(120.dp)
                         .clip(RoundedCornerShape(60.dp)),
-                    colors = CardDefaults.cardColors(
-                        containerColor = SandMedium
-                    )
+                    colors = CardDefaults.cardColors(containerColor = SandMedium)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ava_cat),
-                        contentDescription = "",
+                        painter = painterResource(id = selectedImage),
+                        contentDescription = "Фото питомца",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -140,30 +115,15 @@ fun CatAddScreen(
                     onClick = {
                         val yearsInt = years.toIntOrNull() ?: 0
                         if (name.isNotBlank() && breed.isNotBlank()) {
-                            if (isEditing) {
-                                existingCat?.let { cat ->
-                                    catViewModel.update(
-                                        id = cat.id,
-                                        name = name,
-                                        breed = breed,
-                                        years = yearsInt,
-                                        imageRes = selectedImage,
-                                        description = description,
-                                        userId = currentUser?.id ?: 1
-                                    )
-                                    onSave()
-                                }
-                            } else {
-                                catViewModel.insertCat(
-                                    name = name,
-                                    breed = breed,
-                                    years = yearsInt,
-                                    imageRes = selectedImage,
-                                    description = description,
-                                    userId = currentUser?.id ?: 1
-                                )
-                                onSave()
-                            }
+                            catViewModel.insertCat(
+                                name = name,
+                                breed = breed,
+                                years = yearsInt,
+                                imageRes = selectedImage,
+                                description = description,
+                                userId = currentUser?.id ?: 1
+                            )
+                            onSave()
                         }
                     },
                     modifier = Modifier.weight(1f).height(50.dp),

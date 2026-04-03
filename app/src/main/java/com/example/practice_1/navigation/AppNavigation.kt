@@ -51,8 +51,7 @@ fun AppNavigation(navController: NavHostController,
                 catViewModel = catViewModel,
                 onBack = { navController.navigateUp()},
                 onDelete = { cat -> catViewModel.delete(cat)},
-                onAdd = { navController.navigate(Screen.CatAdd.route) },
-                onEdit = { cat -> navController.navigate(Screen.CatEdit.route.replace("{petId}", cat.id.toString())) }
+                onAdd = { navController.navigate(Screen.CatAdd.route) }
             )
         }
 
@@ -64,18 +63,6 @@ fun AppNavigation(navController: NavHostController,
             CatAddScreen(
                 catViewModel = catViewModel,
                 userViewModel = userViewModel,
-                catId = null,
-                onSave = { navController.navigateUp() },
-                onCancel = { navController.navigateUp() }
-            )
-        }
-
-        composable(Screen.CatEdit.route) { backStackEntry ->
-            val petId = backStackEntry.arguments?.getString("petId")?.toIntOrNull()
-            CatAddScreen(
-                catViewModel = catViewModel,
-                userViewModel = userViewModel,
-                catId = petId,
                 onSave = { navController.navigateUp() },
                 onCancel = { navController.navigateUp() }
             )

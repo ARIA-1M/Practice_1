@@ -12,7 +12,6 @@ sealed class Screen(val route: String, val screenType: ScreenType) {
     object Detail : Screen("detail", ScreenType.WithoutBottomNav)
     object PersonalCard : Screen("personal_card", ScreenType.WithoutBottomNav)
     object CatAdd : Screen("cat_add", ScreenType.WithBottomNav)
-    object CatEdit : Screen("cat_edit/{petId}", ScreenType.WithBottomNav)
 }
 
 sealed class NavItem(val title: String, val route: String) {
@@ -22,5 +21,4 @@ sealed class NavItem(val title: String, val route: String) {
     object Detail : NavItem("Список", Screen.Detail.route)
     object PersonalCard : NavItem("Карточка", Screen.PersonalCard.route)
     object CatAdd : NavItem("Добавление котов", Screen.CatAdd.route)
-    object CatEdit : NavItem("Добавление котов", Screen.CatEdit.route)
 }
