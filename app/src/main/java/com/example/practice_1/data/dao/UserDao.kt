@@ -7,18 +7,20 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.practice_1.data.entity.User
 import kotlinx.coroutines.flow.Flow
-
 @Dao
-interface UserDao {
-
-    @Insert
-    suspend fun insert(item: User)
-
+interface UserReadOnly {
     @Query("SELECT * FROM users ORDER BY id DESC")
     fun getAllUser(): Flow<List<User>>
 
     @Query("SELECT * FROM users WHERE id = :id")
     suspend fun getUserById(id: Int): User?
-
-
 }
+
+@Dao
+interface UserWriteOnly {
+    @Insert
+    suspend fun insert(item: User)
+}
+
+@Dao
+interface UserDao : UserReadOnly, UserWriteOnly

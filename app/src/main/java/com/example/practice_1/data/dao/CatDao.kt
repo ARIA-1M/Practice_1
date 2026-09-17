@@ -11,8 +11,16 @@ import com.example.practice_1.data.entity.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CatDao {
+interface CatReadOnly {
+    @Query("SELECT * FROM cats ORDER BY id DESC")
+    fun getAllCat(): Flow<List<Cat>>
 
+    @Query("SELECT * FROM cats WHERE id = :id")
+    suspend fun getCatById(id: Int): Cat?
+}
+
+@Dao
+interface CatWriteOnly {
     @Insert
     suspend fun insert(item: Cat)
 
@@ -21,11 +29,8 @@ interface CatDao {
 
     @Delete
     suspend fun delete(item: Cat)
-
-    @Query("SELECT * FROM cats ORDER BY id DESC")
-    fun getAllCat(): Flow<List<Cat>>
-
-    @Query("SELECT * FROM cats WHERE id = :id")
-    suspend fun getCatById(id: Int): Cat?
 }
+
+@Dao
+interface CatDao : CatReadOnly, CatWriteOnly
 
